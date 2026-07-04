@@ -1,0 +1,270 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EverQuest Legends on Mac — native, free, Metal</title>
+<style>
+  :root{
+    --ground:#0b0d15; --ground-2:#111420; --panel:#151827; --ink:#ece7d9; --muted:#9a9db4;
+    --line:#242840; --amber:#f2b45c; --amber-deep:#d98a2c; --violet:#9d88e4; --emerald:#68d6a0;
+    --shadow:0 18px 50px -20px rgba(0,0,0,.7);
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Hoefler Text",Georgia,serif;
+    --sans:-apple-system,"SF Pro Text",system-ui,"Helvetica Neue",sans-serif;
+    --mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+    --maxw:66ch;
+  }
+  @media (prefers-color-scheme: light){
+    :root{ --ground:#f2e8d3; --ground-2:#ecdfc4; --panel:#f7efdd; --ink:#241c10; --muted:#6c5f45;
+      --line:#dcc9a4; --amber:#b06715; --amber-deep:#8a4e0d; --violet:#6a4fb0; --emerald:#2c7f53;
+      --shadow:0 16px 40px -22px rgba(90,60,10,.45); }
+  }
+  :root[data-theme="dark"]{ --ground:#0b0d15; --ground-2:#111420; --panel:#151827; --ink:#ece7d9; --muted:#9a9db4;
+    --line:#242840; --amber:#f2b45c; --amber-deep:#d98a2c; --violet:#9d88e4; --emerald:#68d6a0; --shadow:0 18px 50px -20px rgba(0,0,0,.7); }
+  :root[data-theme="light"]{ --ground:#f2e8d3; --ground-2:#ecdfc4; --panel:#f7efdd; --ink:#241c10; --muted:#6c5f45;
+    --line:#dcc9a4; --amber:#b06715; --amber-deep:#8a4e0d; --violet:#6a4fb0; --emerald:#2c7f53; --shadow:0 16px 40px -22px rgba(90,60,10,.45); }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);
+    line-height:1.6;-webkit-font-smoothing:antialiased;font-size:17px}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+  h1,h2,h3{font-family:var(--serif);font-weight:600;text-wrap:balance;line-height:1.12;letter-spacing:.01em}
+  a{color:var(--amber);text-decoration:none}
+  a:hover{text-decoration:underline;text-underline-offset:3px}
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);opacity:.9}
+  p{max-width:var(--maxw)}
+  .muted{color:var(--muted)}
+
+  /* hero */
+  header.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line);
+    background:radial-gradient(120% 90% at 50% -10%, rgba(242,180,92,.16), transparent 55%), var(--ground)}
+  canvas#embers{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+  .hero-in{position:relative;z-index:1;padding:clamp(72px,13vh,150px) 0 clamp(56px,9vh,104px)}
+  h1{font-size:clamp(2.5rem,6.2vw,4.6rem);margin:.28em 0 .1em}
+  h1 .glow{color:var(--amber)}
+  .lede{font-size:clamp(1.06rem,2.1vw,1.32rem);color:var(--ink);opacity:.92;max-width:60ch}
+  .cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:32px}
+  .btn{display:inline-flex;align-items:center;gap:.5em;font-family:var(--sans);font-weight:600;font-size:.98rem;
+    padding:13px 22px;border-radius:11px;border:1px solid transparent;transition:transform .12s ease, box-shadow .2s ease}
+  .btn:hover{text-decoration:none;transform:translateY(-1px)}
+  .btn.primary{background:linear-gradient(180deg,var(--amber),var(--amber-deep));color:#1a1206;box-shadow:var(--shadow)}
+  .btn.ghost{border-color:var(--line);color:var(--ink);background:color-mix(in srgb,var(--panel) 70%,transparent)}
+  .verified{display:inline-flex;align-items:center;gap:9px;margin-top:30px;font-family:var(--mono);font-size:.82rem;color:var(--muted)}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--emerald);box-shadow:0 0 12px var(--emerald)}
+
+  /* sections */
+  section{padding:clamp(56px,8vh,92px) 0;border-bottom:1px solid var(--line)}
+  .kicker{margin:0 0 10px}
+  h2{font-size:clamp(1.7rem,3.6vw,2.5rem);margin:0 0 .5em}
+  .lead{font-size:1.12rem}
+
+  .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:18px;margin-top:34px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:var(--shadow)}
+  .card .num{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;color:var(--violet);text-transform:uppercase}
+  .card h3{font-size:1.24rem;margin:.5em 0 .35em}
+  .card p{font-size:.96rem;color:var(--muted);margin:0}
+
+  /* terminal */
+  .term{background:#07090f;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);margin-top:26px}
+  :root[data-theme="light"] .term{background:#1a140a}
+  @media (prefers-color-scheme:light){.term{background:#1a140a}}
+  .term .bar{display:flex;gap:8px;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03)}
+  .term .bar i{width:12px;height:12px;border-radius:50%;background:#3a3f52;display:inline-block}
+  .term .bar i:nth-child(1){background:#e0674f}
+  .term .bar i:nth-child(2){background:#e0b24a}
+  .term .bar i:nth-child(3){background:#5fbf6a}
+  .term pre{margin:0;padding:20px 20px;overflow-x:auto;font-family:var(--mono);font-size:.9rem;line-height:1.85;color:#e9e4d6}
+  .term .c{color:#f2b45c}.term .g{color:#7f88a3}.term .ok{color:#68d6a0}
+
+  .steps{display:grid;gap:14px;margin-top:26px;counter-reset:s}
+  .step{display:grid;grid-template-columns:34px 1fr;gap:16px;align-items:baseline}
+  .step b{font-family:var(--mono);color:var(--amber);font-weight:600}
+  .step span{color:var(--muted)}.step span strong{color:var(--ink);font-weight:600}
+
+  .proof{display:grid;grid-template-columns:1.2fr .8fr;gap:26px;align-items:center}
+  .receipt{background:#07090f;border:1px solid var(--line);border-radius:14px;padding:20px;font-family:var(--mono);font-size:.86rem;color:#68d6a0;box-shadow:var(--shadow)}
+  @media (prefers-color-scheme:light){.receipt{background:#12100a}}
+  :root[data-theme="light"] .receipt{background:#12100a}
+  .receipt .t{color:#7f88a3}
+  .specs{display:grid;gap:12px}
+  .spec{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed var(--line);padding-bottom:10px;font-size:.95rem}
+  .spec .k{color:var(--muted)} .spec .v{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+  .qol{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:30px}
+  .qol div{border-left:2px solid var(--amber);padding:4px 0 4px 16px}
+  .qol h3{font-size:1.06rem;margin:0 0 .25em;font-family:var(--sans);font-weight:600}
+  .qol p{font-size:.92rem;color:var(--muted);margin:0}
+
+  .req{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .chip{font-family:var(--mono);font-size:.8rem;padding:7px 13px;border-radius:999px;border:1px solid var(--line);color:var(--muted);background:var(--panel)}
+
+  footer{padding:52px 0 70px}
+  footer p{font-size:.9rem;color:var(--muted);max-width:70ch}
+  .credit b{color:var(--ink);font-weight:600}
+  .toggle{position:fixed;top:16px;right:16px;z-index:5;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;
+    padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--muted);cursor:pointer}
+  .toggle:hover{color:var(--amber)}
+  @media (max-width:720px){.proof{grid-template-columns:1fr}}
+  @media (prefers-reduced-motion:reduce){canvas#embers{display:none}}
+</style>
+</head><body>
+
+<button class="toggle" id="themeBtn" aria-label="Toggle theme">☾ / ☀</button>
+
+<header class="hero">
+  <canvas id="embers" aria-hidden="true"></canvas>
+  <div class="wrap hero-in">
+    <p class="eyebrow">Apple Silicon · Open-source Wine + Metal · No CrossOver</p>
+    <h1>EverQuest Legends,<br><span class="glow">native</span> on your Mac.</h1>
+    <p class="lede">Classic Norrath, rendered through Apple Metal — free, no Parallels, no CrossOver subscription. This is the piece that was missing: getting a <em>fresh</em> install to actually log in, download, and play on Apple Silicon.</p>
+    <div class="cta-row">
+      <a class="btn primary" href="https://github.com/jkatsnelson/osxeql-qol">Get the tools →</a>
+      <a class="btn ghost" href="#quickstart">Read the 3-minute guide</a>
+    </div>
+    <div class="verified"><span class="dot"></span> Verified in-game on macOS 26.4 · Apple Silicon · DXMT/Metal</div>
+  </div>
+</header>
+
+<section id="story">
+  <div class="wrap">
+    <p class="eyebrow kicker">A torch in the dark</p>
+    <h2>The engine existed. The last mile didn't.</h2>
+    <p class="lead"><a href="https://github.com/sowoky/osxEQL">osxEQL</a> pairs open-source Wine (from CrossOver's LGPL source) with <a href="https://github.com/3Shain/dxmt">DXMT</a> — DirectX 11 translated straight to Metal — so EverQuest Legends runs on Apple Silicon with zero proprietary layers. It's brilliant at <em>playing</em> the game.</p>
+    <p>But a clean, first-time install couldn't get past the front door: the launcher crashed before you could even log in. It turned out to be three specific walls — and they're all gone now.</p>
+  </div>
+</section>
+
+<section id="walls">
+  <div class="wrap">
+    <p class="eyebrow kicker">What we broke through</p>
+    <h2>Three walls, cleared.</h2>
+    <div class="grid3">
+      <div class="card">
+        <div class="num">Wall 01 · Runtime</div>
+        <h3>The launcher had no GPU or fonts</h3>
+        <p>osxEQL's Wine shipped without <code>libvulkan.1.dylib</code> (MoltenVK) and an x86-64 FreeType — but the launcher is a Chromium/CEF app that needs Vulkan, and Wine needs FreeType. We drop the right x86-64 libraries into the Wine tree where <code>dlopen</code> actually looks.</p>
+      </div>
+      <div class="card">
+        <div class="num">Wall 02 · Services</div>
+        <h3>No RPC subsystem</h3>
+        <p>The minimal prefix never started <code>rpcss</code>, so every COM/RPC call died with <code>RPC_S_SERVER_UNAVAILABLE</code>. We bring it up before launch.</p>
+      </div>
+      <div class="card">
+        <div class="num">Wall 03 · The big one</div>
+        <h3>A bootstrapper that eats itself</h3>
+        <p>The first-run <code>LaunchPad.exe</code> loads Daybreak's <code>npdg</code> download plugin, which crashes under Wine. But it first downloads the <em>real</em> CEF launcher into a mangled folder literally named <code>C:</code>. Rename it, run the real launcher directly — and you're at the login screen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="quickstart">
+  <div class="wrap">
+    <p class="eyebrow kicker">Quickstart</p>
+    <h2>Three commands to Norrath.</h2>
+    <p class="muted">You bring an Apple Silicon Mac, a Daybreak/EQ Legends account, and the official <code>EQLegends_setup.exe</code>. The tool does the rest.</p>
+    <div class="term">
+      <div class="bar"><i></i><i></i><i></i></div>
+<pre><span class="g"># 1 · get the tools</span>
+git clone https://github.com/jkatsnelson/osxeql-qol
+cd osxeql-qol
+
+<span class="g"># 2 · one command: adds MoltenVK+FreeType, installs, bypasses the bootstrapper, opens the login</span>
+<span class="c">./eql-mac.sh</span> setup ~/Downloads/EQLegends_setup.exe
+
+<span class="g"># 3 · log in, let it pull the ~6.9 GB client, hit Play</span>
+<span class="c">./eql-mac.sh</span> play        <span class="g"># eqgame → DXMT → Metal</span>
+<span class="ok"># CRender::InitDevice completed successfully.</span></pre>
+    </div>
+    <div class="steps">
+      <div class="step"><b>→</b><span>The launcher opens the real <strong>Game Jawn / Daybreak login</strong>. Sign in with your account.</span></div>
+      <div class="step"><b>→</b><span>It downloads the <strong>~6.9 GB</strong> classic client (pre-Kunark). Keep your Mac awake — the tool handles that.</span></div>
+      <div class="step"><b>→</b><span>Hit <strong>Play</strong>. eqgame renders through DXMT/Metal, windowed, mouse mapped 1:1.</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="proof">
+  <div class="wrap">
+    <p class="eyebrow kicker">Proof, not promises</p>
+    <h2>It renders. Here's the receipt.</h2>
+    <div class="proof">
+      <div class="receipt">
+<span class="t">[Sat Jul 04 2026] EverQuest Legends/Logs/dbg.txt</span><br><br>
+CRender::InitDevice: Using 32bit mode.<br>
+CRender::InitDevice: HardwareTnL Enabled.<br>
+<strong>CRender::InitDevice completed successfully.</strong><br>
+Resolution selected 1280 x 960, 32 bits
+      </div>
+      <div class="specs">
+        <div class="spec"><span class="k">Graphics path</span><span class="v">D3D11 → DXMT → Metal</span></div>
+        <div class="spec"><span class="k">CPU translation</span><span class="v">x86-64 · Rosetta 2</span></div>
+        <div class="spec"><span class="k">Client size</span><span class="v">6.9 GB</span></div>
+        <div class="spec"><span class="k">CrossOver needed</span><span class="v">no</span></div>
+        <div class="spec"><span class="k">Cost</span><span class="v">$0</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="qol">
+  <div class="wrap">
+    <p class="eyebrow kicker">Our unique picks</p>
+    <h2>Quality-of-life, tuned for Mac.</h2>
+    <div class="qol">
+      <div><h3>Community maps</h3><p>Brewall / Good maps dropped straight into the client — classic EQ ships none.</p></div>
+      <div><h3>Fixing "it's so dark"</h3><p>The old gamma slider is dead under Wine. EQ Legends' DX11 client has an in-engine <em>Enhanced Vision</em> slider (Options → Display → Advanced) that works — plus the honest truth about race night-vision and torches.</p></div>
+      <div><h3>No double cursor</h3><p>StealthPointer hides the macOS pointer over the game — F1 / F2.</p></div>
+      <div><h3>DXMT tuning</h3><p>A sane <code>dxmt.conf</code>: frame pacing, Metal 3.2 shaders, alt-tab handling.</p></div>
+      <div><h3>doctor.sh</h3><p>One read-only check for Rosetta, the libs, the prefix, disk, and the DXMT symbol.</p></div>
+      <div><h3>Windowed &amp; mapped</h3><p>Fullscreen off, 1280×960 — kills the exclusive-fullscreen popup and the offset-mouse bug in one move.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="req">
+  <div class="wrap">
+    <p class="eyebrow kicker">Before you start</p>
+    <h2>Requirements &amp; honest caveats.</h2>
+    <div class="req">
+      <span class="chip">Apple Silicon (M1+)</span><span class="chip">macOS 13+ · tested 26.4</span><span class="chip">Rosetta 2</span>
+      <span class="chip">Daybreak / EQ Legends account</span><span class="chip">official EQLegends_setup.exe</span><span class="chip">~10 GB free</span>
+    </div>
+    <p style="margin-top:26px">Straight talk: this is a community workaround, not an official port. It routes around a launcher that crashes under Wine, so treat it as "works, with care" — keep the Mac awake during the download, and expect the occasional relaunch. You supply your own game and account; nothing here is cracked or bypassing payment.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="eyebrow" style="margin-bottom:16px">Standing on shoulders</p>
+    <p class="credit">Built on <b>osxEQL</b> by u/sowoky, <b>DXMT</b> by 3Shain, and <b>MoltenVK</b>. This project — the fresh-install fix, the bootstrapper bypass, and the QoL — is the layer on top. Unofficial and not affiliated with Daybreak Game Company, Game Jawn, CodeWeavers, or Apple. EverQuest is a trademark of Daybreak Game Company.</p>
+    <p style="margin-top:20px"><a href="https://github.com/jkatsnelson/osxeql-qol">github.com/jkatsnelson/osxeql-qol</a></p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var btn=document.getElementById('themeBtn'), root=document.documentElement;
+  btn.addEventListener('click',function(){
+    var cur=root.getAttribute('data-theme');
+    if(!cur){ cur = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light'; }
+    root.setAttribute('data-theme', cur==='dark'?'light':'dark');
+  });
+})();
+(function(){
+  var c=document.getElementById('embers'); if(!c) return;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var x=c.getContext('2d'), W,H,parts;
+  function size(){ W=c.width=c.offsetWidth*devicePixelRatio; H=c.height=c.offsetHeight*devicePixelRatio; }
+  function mk(){ return {x:Math.random()*W, y:H+Math.random()*H*0.3, r:(Math.random()*1.6+0.4)*devicePixelRatio,
+    s:(Math.random()*0.5+0.2)*devicePixelRatio, d:Math.random()*0.6-0.3, a:Math.random()*0.5+0.2, t:Math.random()*6.28}; }
+  function init(){ size(); parts=[]; var n=Math.min(70, Math.floor(W/28)); for(var i=0;i<n;i++){var p=mk();p.y=Math.random()*H;parts.push(p);} }
+  function frame(){ x.clearRect(0,0,W,H);
+    for(var i=0;i<parts.length;i++){ var p=parts[i]; p.y-=p.s; p.t+=0.02; p.x+=Math.sin(p.t)*0.4*devicePixelRatio+p.d*0.3;
+      if(p.y< -10){ parts[i]=mk(); continue; }
+      var fade = p.y < H*0.25 ? p.y/(H*0.25) : 1;
+      x.beginPath(); x.arc(p.x,p.y,p.r,0,6.29);
+      x.fillStyle='rgba(242,180,92,'+(p.a*fade*0.9)+')'; x.shadowBlur=6*devicePixelRatio; x.shadowColor='rgba(242,150,60,.7)'; x.fill();
+    }
+    requestAnimationFrame(frame);
+  }
+  init(); frame(); addEventListener('resize', init);
+})();
+</script>
+</body></html>

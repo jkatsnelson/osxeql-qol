@@ -1,0 +1,30 @@
+# osxeql-qol keeps NO game data, prefixes, or downloaded assets in the repo.
+# Everything runtime lives under ~/Library/Application Support/osxEQL/qol/.
+
+# scratch / build
+*.tar.gz
+*.tgz
+*.zip
+*.dmg
+*.dylib
+/tmp/
+qol-*/
+
+# staged maps / skins if a user ever runs from a working copy
+maps/
+uifiles/
+
+# editor / OS cruft
+.DS_Store
+*.swp
+*~
+
+# python
+__pycache__/
+*.pyc
+
+__pycache__/
+*.pyc
+.bottles/
+test/
+testlogs/

@@ -9,7 +9,7 @@ quality-of-life on top.
 > 6.9 GB client download → `eqgame.exe` rendering through DXMT/Metal
 > (`dbg.txt`: `CRender::InitDevice completed successfully`).
 >
-> 🔥 **Website / guide:** *(add the published link here)*
+> 🔥 **Website / guide:** https://claude.ai/code/artifact/989e8c3d-40d8-4357-856d-397c89221b43
 
 Built on [**osxEQL**](https://github.com/sowoky/osxEQL) by u/sowoky, [**DXMT**](https://github.com/3Shain/dxmt) by 3Shain, and **MoltenVK**. This is the layer on top: the fresh-install fixes + QoL.
 
@@ -32,18 +32,21 @@ first-run piece.
 
 ## Quickstart
 
-You bring: an Apple Silicon Mac, a Daybreak/EQ Legends account, and the official
-`EQLegends_setup.exe`. First install osxEQL from its [releases](https://github.com/sowoky/osxEQL/releases)
-(drag to `/Applications`, then `xattr -dr com.apple.quarantine /Applications/osxEQL.app`).
+**You provide:** an Apple Silicon Mac, a Daybreak / EQ Legends account, and the official
+`EQLegends_setup.exe` — download it while logged in at [everquest.com](https://www.everquest.com)
+(it's account-gated, so grab it yourself). **The script does the rest** — it installs Rosetta 2
+and osxEQL.app for you; no manual setup.
 
 ```sh
-git clone <this-repo> && cd osxeql-qol
+git clone https://github.com/jkatsnelson/osxeql-qol && cd osxeql-qol
+chmod +x eql-mac.sh
 
-# one command: adds MoltenVK+FreeType, runs the installer, bypasses the bootstrapper, opens the login
+# one command: installs Rosetta + osxEQL, adds MoltenVK+FreeType, runs the installer,
+# does the bootstrapper -> real-launcher hand-off, and opens the real login screen.
 ./eql-mac.sh setup ~/Downloads/EQLegends_setup.exe
 
-# log in → let it download the ~6.9 GB client → then:
-./eql-mac.sh play
+# then: log in in the launcher window, let it download the ~6.9 GB client, and hit Play.
+# (need to re-open it later? ./eql-mac.sh launch  —  tune display + open: ./eql-mac.sh play)
 ```
 
 `eql-mac.sh` subcommands: `setup <installer>` · `launch` · `play` · `doctor`.

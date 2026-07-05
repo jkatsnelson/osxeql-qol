@@ -74,7 +74,8 @@ On a clean install, vanilla osxEQL hits three walls. The script handles all thre
 ### Credits
 Huge thanks to **u/sowoky** (osxEQL), **3Shain** (DXMT), and the **MoltenVK** team. I just found and smoothed over the fresh-install rough edges and bundled some conveniences.
 
-Repo: https://github.com/jkatsnelson/osxeql-qol
+**Site / guide:** https://jkatsnelson.github.io/osxeql-qol/
+**Repo:** https://github.com/jkatsnelson/osxeql-qol
 
 Happy to help troubleshoot in the comments — post your `doctor.sh` output if you get stuck.
 
@@ -90,7 +91,7 @@ It's built on u/sowoky's **osxEQL** (Wine from CrossOver's LGPL source + **3Shai
 
 **Requirements:** Apple Silicon Mac, macOS 13+ (tested 26.4), Rosetta 2, a legit Daybreak/EQ Legends account + the official installer, ~10 GB free.
 
-Full write-up and quickstart in my r/EQLegends post: [link once Draft 2 is live]
+Full write-up and quickstart: https://jkatsnelson.github.io/osxeql-qol/ (or my r/EQLegends post: [link once Draft 2 is live])
 
 Repo: https://github.com/jkatsnelson/osxeql-qol
 

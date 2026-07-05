@@ -58,7 +58,8 @@ Keep your Mac awake during the download (the script pins `caffeinate`).
 |---|---|
 | `eql-mac.sh` | **The flagship** — the whole fresh-install recipe in one command |
 | `fix-runtime-libs.sh` | Fetches x86_64 MoltenVK + freetype + libpng into the Wine tree (`--revert` to undo) |
-| `install-maps.sh` | Community **maps** (Brewall/Good) into the client — classic EQ ships none |
+| `pimp-ui.sh` + `docs/UI-FIRST-LOGIN.md` | Clean **`default_modern` skin** + readable/windowed display, and a 5-minute first-login UI polish guide (maps, chat tabs, hotbars, brightness, Zeal notes) |
+| `install-maps.sh` | Community maps installer — **note:** EQ Legends already bundles labeled, community-quality maps, so this is usually a no-op |
 | `install-config.sh` + `apply-eqclient-tuning.py` | Sane `dxmt.conf` + CRLF/latin-1-safe `eqclient.ini` tuning |
 | `doctor.sh` | Read-only health check (Rosetta, quarantine, the libs, prefix, disk, DXMT symbol) |
 | `helpers/brightness.md` | The "it's SO DARK" guide — the in-engine **Enhanced Vision** slider works under DXMT; the old hardware-gamma slider doesn't |

@@ -77,6 +77,7 @@ cmd_install(){ # $1 = EQLegends_setup.exe
   [ -n "$setup" ] || die "usage: ./eql-mac.sh setup <path-to-EQLegends_setup.exe>  (get it from https://www.everquest.com while logged in)"
   [ -f "$setup" ] || die "installer not found: $setup"
   wine_env; wake; kill_wine; clean_winetemp
+  mkdir -p "$OH/logs"                          # fresh prefix has no logs/ dir yet
   if [ ! -f "$PREFIX/system.reg" ]; then
     say "creating the Wine prefix…"; WINEARCH=win64 "$WD/bin/wine" wineboot --init >/dev/null 2>&1; "$WD/bin/wineserver" -w
   fi

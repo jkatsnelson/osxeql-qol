@@ -59,7 +59,17 @@ wine_env(){
   export WINEDLLOVERRIDES="mscoree,mshtml=" WINEDEBUG="${WINEDEBUG:--all}"
   unset WINELOADER
 }
-wake(){ pkill -f 'caffeinate -dimsu' 2>/dev/null; nohup caffeinate -dimsu >/dev/null 2>&1 & disown 2>/dev/null; }
+wake(){ # keep the DISPLAY awake ONLY while EQ runs, then let it sleep normally again.
+  # Display sleep tears down the Metal surface and DXMT loses the D3D->Metal context,
+  # which crashes eqgame — so we hold a caffeinate assertion tied to the game's lifetime
+  # and release it the moment the launcher/eqgame exit (your normal sleep timer returns).
+  pkill -f 'caffeinate -dimsu' 2>/dev/null
+  nohup bash -c '
+    caffeinate -dimsu & caf=$!
+    for _ in $(seq 1 90); do pgrep -f "eqgame.exe|LaunchPad.exe" >/dev/null && break; sleep 1; done
+    while pgrep -f "eqgame.exe|LaunchPad.exe" >/dev/null; do sleep 10; done
+    kill "$caf" 2>/dev/null
+  ' >/dev/null 2>&1 & disown; }
 kill_wine(){ "$WD/bin/wineserver" -k 2>/dev/null; pkill -9 -f 'winedevice|explorer.exe|LaunchPad|rpcss|eqgame' 2>/dev/null; sleep 2; }
 clean_winetemp(){ rm -rf "${TMPDIR:-/tmp}"/winetemp-* 2>/dev/null; }
 start_rpcss(){ nohup "$WD/bin/wine" rpcss.exe >/dev/null 2>&1 & disown; sleep 2; }
@@ -92,6 +102,8 @@ cmd_install(){ # $1 = EQLegends_setup.exe
 
 cmd_launch(){
   wine_env; wake; kill_wine; clean_winetemp; mkdir -p "$OH/logs"
+  # snapshot the previous session's log BEFORE this launch truncates it (crash forensics)
+  [ -f "$GAME/Logs/dbg.txt" ] && cp "$GAME/Logs/dbg.txt" "$OH/logs/dbg.prev-session.txt" 2>/dev/null
   promote
   if [ -f "$GAME/LaunchPad.exe" ]; then
     say "opening the real launcher — log in, let it patch/download, then hit Play."

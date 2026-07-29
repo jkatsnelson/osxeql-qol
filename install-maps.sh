@@ -26,11 +26,13 @@ qol_init
 STAGE_MAPS="$QOL_STAGE/maps"
 mkdir -p "$STAGE_MAPS"
 
-# Candidate sources (Good's maps mirror + Brewall). Override with MAPS_URL=...
+# Candidate sources (Brewall's full pack on eqmaps.info). Override with MAPS_URL=...
+# NOTE: eqmaps.info versions its zips by date, so this URL will eventually rot too.
+# If all candidates 404, grab the current ".zip" link from https://www.eqmaps.info/
+# and pass it as MAPS_URL=<url> ./install-maps.sh
 CANDIDATES=(
   "${MAPS_URL:-}"
-  "https://www.eqmaps.info/wp-content/uploads/GoodsCurrentZips/MapsCurrent.zip"
-  "https://raw.githubusercontent.com/adamjhensley/eq-maps/master/maps.zip"
+  "https://www.eqmaps.info/wp-content/uploads/2024/01/brewall-20240109.zip"
 )
 
 TMP="$(mktemp -d "${TMPDIR:-/tmp}/qol-maps.XXXXXX")"; trap 'rm -rf "$TMP"' EXIT

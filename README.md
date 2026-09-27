@@ -9,7 +9,7 @@ quality-of-life on top.
 > 6.9 GB client download → `eqgame.exe` rendering through DXMT/Metal
 > (`dbg.txt`: `CRender::InitDevice completed successfully`).
 >
-> 🔥 **Website / guide:** https://claude.ai/code/artifact/989e8c3d-40d8-4357-856d-397c89221b43
+> 🔥 **Website / guide:** https://jkatsnelson.github.io/osxeql-qol/
 
 Built on [**osxEQL**](https://github.com/sowoky/osxEQL) by u/sowoky, [**DXMT**](https://github.com/3Shain/dxmt) by 3Shain, and **MoltenVK**. This is the layer on top: the fresh-install fixes + QoL.
 
